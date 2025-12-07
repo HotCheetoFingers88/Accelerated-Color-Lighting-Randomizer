@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.18)
+project(cuda_color_randomizer LANGUAGES CXX CUDA)
+find_package(OpenCV REQUIRED)
+
+add_executable(randomizer src/main.cu src/utils.h)
+set_target_properties(randomizer PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+include_directories(${OpenCV_INCLUDE_DIRS})
+target_link_libraries(randomizer PRIVATE ${OpenCV_LIBS} curand)
+if (NOT MSVC)
+  target_compile_options(randomizer PRIVATE -O3 -march=native -Wall -Wextra)
+endif()
